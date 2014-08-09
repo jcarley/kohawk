@@ -1,0 +1,21 @@
+language: ruby
+cache: bundler
+
+rvm:
+  - jruby
+  - 2.1.1
+
+script: 'bundle exec rake'
+
+before_install:
+  - wget -q http://www.rabbitmq.com/rabbitmq-signing-key-public.asc -O- | apt-key add -
+  - echo "deb http://www.rabbitmq.com/debian/ testing main" | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get update -qq
+  - sudo apt-get install rabbitmq-server
+
+notifications:
+  email:
+    recipients:
+      - jeff.carley@gmail.com
+    on_failure: change
+    on_success: never
