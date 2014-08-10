@@ -9,6 +9,4 @@ describe Kohawk::ConnectionManager do
     expect(instance1).to be(instance2)
   end
 
-
-
 end

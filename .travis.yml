@@ -11,13 +11,16 @@ services:
   - rabbitmq
 
 before_script:
+  - sudo wget -O /var/lib/rabbitmq/rabbitmqadmin http://localhost:15672/cli/rabbitmqadmin
+  - sudo chown root:root /var/lib/rabbitmq/rabbitmqadmin
+  - sudo chmod 0755 /var/lib/rabbitmq/rabbitmqadmin
   - sudo /usr/sbin/rabbitmqctl add_user dev dev
   - sudo /usr/sbin/rabbitmqctl set_user_tags dev administrator
   - sudo /usr/sbin/rabbitmqctl add_vhost local
   - sudo /usr/sbin/rabbitmqctl set_permissions -p local dev '.*' '.*' '.*'
-  - sudo rabbitmqadmin declare exchange --vhost=local --user=dev --password=dev name=kohawk type=topic
-  - sudo rabbitmqadmin declare queue name=test durable=true auto_delete=false -u dev -p dev -V local
-  - sudo rabbitmqadmin declare binding source=kohawk destination_type=queue destination=test routing_key=event.* -u dev -p dev -V local
+  - sudo /var/lib/rabbitmq/rabbitmqadmin declare exchange --vhost=local --user=dev --password=dev name=kohawk type=topic
+  - sudo /var/lib/rabbitmq/rabbitmqadmin declare queue name=test durable=true auto_delete=false -u dev -p dev -V local
+  - sudo /var/lib/rabbitmq/rabbitmqadmin declare binding source=kohawk destination_type=queue destination=test routing_key=event.* -u dev -p dev -V local
 
 notifications:
   email:
