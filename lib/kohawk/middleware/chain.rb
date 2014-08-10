@@ -23,12 +23,24 @@ module Kohawk
         entries.delete_if { |k| k.klass == klass }
       end
 
+      def retrieve
+        entries.map(&:to_instance)
+      end
+
       def exists?(klass)
         any? { |k| k.klass == klass }
       end
 
-      def invoke(event, channel_proxy)
-        yield event, channel_proxy if block_given?
+      def invoke(event, channel_proxy, &final_action)
+        chain = retrieve.dup
+        invoke_chain = lambda do |event, channel_proxy|
+          if chain.empty?
+            final_action.call(event, channel_proxy)
+          else
+            chain.shift.call(event, channel_proxy, &invoke_chain)
+          end
+        end
+        invoke_chain.call(event, channel_proxy)
       end
 
     end
@@ -39,6 +51,10 @@ module Kohawk
       def initialize(klass, *args)
         @klass = klass
         @args = args
+      end
+
+      def to_instance
+        @klass.new(*@args)
       end
 
     end

@@ -1,15 +1,7 @@
 module Kohawk
   class Configuration
 
-    attr_accessor :host, :vhost, :port, :user, :password
-
-    def exchange_name
-      @exchange_name || "dsa"
-    end
-
-    def exchange_name=(value)
-      @exchange_name = value
-    end
+    attr_accessor :host, :vhost, :port, :user, :password, :exchange_name
 
     def middleware
       @middleware ||= EventDispatcher.default_middleware

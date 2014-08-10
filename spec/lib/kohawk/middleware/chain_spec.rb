@@ -1,7 +1,16 @@
 require 'spec_helper'
 
 class TestMiddleware
-
+  def initialize(msg)
+  end
+end
+class TestMiddleware2
+  def initialize(msg)
+  end
+end
+class TestMiddleware3
+  def initialize(msg)
+  end
 end
 
 describe Kohawk::Middleware::Chain do
@@ -11,6 +20,7 @@ describe Kohawk::Middleware::Chain do
     it { should respond_to(:each) }
     it { should respond_to(:add).with(2).arguments }
     it { should respond_to(:remove).with(1).argument }
+    it { should respond_to(:retrieve) }
     it { should respond_to(:exists?).with(1).arguments }
     it { should respond_to(:invoke).with(2).arguments }
   end
@@ -54,6 +64,27 @@ describe Kohawk::Middleware::Chain do
       subject.add(TestMiddleware, "hello")
       subject.remove(TestMiddleware)
       expect(subject.entries.count).to eql(0)
+    end
+
+  end
+
+  describe "#retrieve" do
+
+    before(:each) do
+      subject.add(TestMiddleware, "hello")
+      subject.add(TestMiddleware2, "hello2")
+      subject.add(TestMiddleware3, "hello3")
+    end
+
+    it "returns an array of middleware objects" do
+      expect(subject.retrieve).to be_instance_of(Array)
+    end
+
+    it "returns instances of each middleware object" do
+      middleware = subject.retrieve
+      expect(subject.retrieve[0]).to be_instance_of(TestMiddleware)
+      expect(subject.retrieve[1]).to be_instance_of(TestMiddleware2)
+      expect(subject.retrieve[2]).to be_instance_of(TestMiddleware3)
     end
 
   end
