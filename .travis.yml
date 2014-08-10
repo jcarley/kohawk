@@ -12,6 +12,7 @@ before_install:
   - echo "deb http://www.rabbitmq.com/debian/ testing main" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq
   - sudo apt-get install rabbitmq-server
+  - /usr/local/bin/rabbitmq-server
   - /usr/local/bin/rabbitmqctl add_user dev dev
   - /usr/local/bin/rabbitmqctl set_user_tags dev administrator
   - /usr/local/bin/rabbitmqctl add_vhost local
