@@ -1,4 +1,5 @@
 require 'singleton'
+require 'bunny'
 
 module Kohawk
   class ConnectionManager
@@ -15,7 +16,7 @@ module Kohawk
     end
 
     def disconnect
-      if session.nil?
+      unless session.nil?
         session.stop
         @session = nil
       end

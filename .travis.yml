@@ -5,8 +5,6 @@ rvm:
   - jruby
   - 2.1.1
 
-script: 'bundle exec rake'
-
 services:
   - rabbitmq
 
@@ -21,6 +19,8 @@ before_script:
   - sudo /var/lib/rabbitmq/rabbitmqadmin declare exchange --vhost=local --user=dev --password=dev name=kohawk type=topic
   - sudo /var/lib/rabbitmq/rabbitmqadmin declare queue name=test durable=true auto_delete=false -u dev -p dev -V local
   - sudo /var/lib/rabbitmq/rabbitmqadmin declare binding source=kohawk destination_type=queue destination=test routing_key=event.* -u dev -p dev -V local
+
+script: 'bundle exec rake'
 
 notifications:
   email:
