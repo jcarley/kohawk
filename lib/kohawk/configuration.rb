@@ -1,5 +1,4 @@
 module Kohawk
-
   class Configuration
 
     attr_accessor :host, :vhost, :port, :user, :password

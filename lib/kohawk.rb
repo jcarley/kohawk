@@ -1,6 +1,9 @@
+require 'kohawk/core_ext'
 require "kohawk/version"
+require "kohawk/event_dispatcher"
 require "kohawk/configuration"
 require "kohawk/connection_manager"
+require "kohawk/middleware/chain"
 
 module Kohawk
   def self.configuration
