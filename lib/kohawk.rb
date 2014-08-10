@@ -1,5 +1,11 @@
 require "kohawk/version"
+require "kohawk/configuration"
+require "kohawk/connection_manager"
 
 module Kohawk
-  # Your code goes here...
+  def self.configuration
+    @configuration ||= Kohawk::Configuration.new
+    yield @configuration if block_given?
+    @configuration
+  end
 end

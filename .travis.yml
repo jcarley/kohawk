@@ -12,6 +12,13 @@ before_install:
   - echo "deb http://www.rabbitmq.com/debian/ testing main" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq
   - sudo apt-get install rabbitmq-server
+  - /usr/local/bin/rabbitmqctl add_user dev dev
+  - /usr/local/bin/rabbitmqctl set_user_tags dev administrator
+  - /usr/local/bin/rabbitmqctl add_vhost local
+  - /usr/local/bin/rabbitmqctl set_permissions -p local dev '.*' '.*' '.*'
+  - /usr/local/bin/rabbitmqadmin declare exchange --vhost=local --user=dev --password=dev name=kohawk type=topic
+  - /usr/local/bin/rabbitmqadmin declare queue name=test durable=true auto_delete=false -u dev -p dev -V local
+  - /usr/local/bin/rabbitmqadmin declare binding source=kohawk destination_type=queue destination=test routing_key=event.* -u dev -p dev -V local
 
 notifications:
   email:
