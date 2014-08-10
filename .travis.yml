@@ -15,10 +15,9 @@ before_script:
   - sudo /usr/sbin/rabbitmqctl set_user_tags dev administrator
   - sudo /usr/sbin/rabbitmqctl add_vhost local
   - sudo /usr/sbin/rabbitmqctl set_permissions -p local dev '.*' '.*' '.*'
-  - echo `which rabbitmqadmin`
-  - sudo `which rabbitmqadmin` declare exchange --vhost=local --user=dev --password=dev name=kohawk type=topic
-  - sudo `which rabbitmqadmin` declare queue name=test durable=true auto_delete=false -u dev -p dev -V local
-  - sudo `which rabbitmqadmin` declare binding source=kohawk destination_type=queue destination=test routing_key=event.* -u dev -p dev -V local
+  - sudo rabbitmqadmin declare exchange --vhost=local --user=dev --password=dev name=kohawk type=topic
+  - sudo rabbitmqadmin declare queue name=test durable=true auto_delete=false -u dev -p dev -V local
+  - sudo rabbitmqadmin declare binding source=kohawk destination_type=queue destination=test routing_key=event.* -u dev -p dev -V local
 
 notifications:
   email:
