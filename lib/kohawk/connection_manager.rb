@@ -5,20 +5,20 @@ module Kohawk
   class ConnectionManager
     include Singleton
 
-    attr_reader :session
+    attr_reader :adaptor
 
     def connect(options)
-      if session.nil?
-        @session = Bunny.new(options)
-        session.start
+      if adaptor.nil?
+        @adaptor = Kohawk.configuration.adaptor
+        adaptor.connect(options)
       end
-      session
+      adaptor
     end
 
     def disconnect
-      unless session.nil?
-        session.stop
-        @session = nil
+      unless adaptor.nil?
+        adaptor.disconnect
+        @adaptor = nil
       end
     end
 

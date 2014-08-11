@@ -9,6 +9,14 @@ module Kohawk
       @middleware
     end
 
+    def adaptor
+      @adaptor ||= Kohawk::Adaptors::BunnyAdaptor.new
+    end
+
+    def adaptor=(adaptor)
+      @adaptor = adaptor
+    end
+
     def connect_options
       {
         :host  => host,

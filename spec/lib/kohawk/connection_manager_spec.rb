@@ -4,6 +4,8 @@ describe Kohawk::ConnectionManager do
 
   subject { Kohawk::ConnectionManager.instance }
 
+  let(:adaptor) { double('adaptor', :connect => nil, :disconnect => nil) }
+
   let(:options) do
     {
       :host  => "localhost",
@@ -12,6 +14,15 @@ describe Kohawk::ConnectionManager do
       :user  => "dev",
       :pass  => "dev"
     }
+  end
+
+  before(:each) do
+    Kohawk.configuration.adaptor = adaptor
+  end
+
+  after(:each) do
+    subject.disconnect
+    Kohawk.configuration.adaptor = nil
   end
 
   it "only creates one instance of ConnectionManager" do
@@ -28,8 +39,8 @@ describe Kohawk::ConnectionManager do
 
   describe "#connect" do
 
-    it "returns an instance of Bunny::Session" do
-      expect(subject.connect(options)).to be_instance_of(Bunny::Session)
+    it "returns an instance of an adaptor" do
+      expect(subject.connect(options)).to be(adaptor)
     end
 
     it "returns the same connection" do
@@ -45,7 +56,7 @@ describe Kohawk::ConnectionManager do
     it "closes the session" do
       subject.connect(options)
       subject.disconnect
-      expect(subject.session).to be_nil
+      expect(subject.adaptor).to be_nil
     end
   end
 
