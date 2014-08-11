@@ -14,6 +14,12 @@ describe Kohawk::Configuration do
 
   end
 
+  describe "#adapter" do
+    it "returns the default BunnyAdaptor" do
+      expect(Kohawk.configuration.adapter).to be_instance_of(Kohawk::Adapters::Bunny)
+    end
+  end
+
   it "returns the default middleware" do
     expect(Kohawk.configuration.middleware).to be_instance_of(Kohawk::Middleware::Chain)
   end

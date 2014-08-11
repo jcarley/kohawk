@@ -4,7 +4,7 @@ describe Kohawk::ConnectionManager do
 
   subject { Kohawk::ConnectionManager.instance }
 
-  let(:adaptor) { double('adaptor', :connect => nil, :disconnect => nil) }
+  let(:adapter) { double('adapter', :connect => nil, :disconnect => nil) }
 
   let(:options) do
     {
@@ -17,12 +17,12 @@ describe Kohawk::ConnectionManager do
   end
 
   before(:each) do
-    Kohawk.configuration.adaptor = adaptor
+    Kohawk.configuration.adapter = adapter
   end
 
   after(:each) do
     subject.disconnect
-    Kohawk.configuration.adaptor = nil
+    Kohawk.configuration.adapter = nil
   end
 
   it "only creates one instance of ConnectionManager" do
@@ -40,7 +40,7 @@ describe Kohawk::ConnectionManager do
   describe "#connect" do
 
     it "returns an instance of an adaptor" do
-      expect(subject.connect(options)).to be(adaptor)
+      expect(subject.connect(options)).to be(adapter)
     end
 
     it "returns the same connection" do
@@ -56,7 +56,7 @@ describe Kohawk::ConnectionManager do
     it "closes the session" do
       subject.connect(options)
       subject.disconnect
-      expect(subject.adaptor).to be_nil
+      expect(subject.adapter).to be_nil
     end
   end
 

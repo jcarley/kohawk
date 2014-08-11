@@ -1,24 +1,23 @@
 require 'singleton'
-require 'bunny'
 
 module Kohawk
   class ConnectionManager
     include Singleton
 
-    attr_reader :adaptor
+    attr_reader :adapter
 
     def connect(options)
-      if adaptor.nil?
-        @adaptor = Kohawk.configuration.adaptor
-        adaptor.connect(options)
+      if adapter.nil?
+        @adapter = Kohawk.configuration.adapter
+        adapter.connect(options)
       end
-      adaptor
+      adapter
     end
 
     def disconnect
-      unless adaptor.nil?
-        adaptor.disconnect
-        @adaptor = nil
+      unless adapter.nil?
+        adapter.disconnect
+        @adapter = nil
       end
     end
 

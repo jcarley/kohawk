@@ -9,12 +9,12 @@ module Kohawk
       @middleware
     end
 
-    def adaptor
-      @adaptor ||= Kohawk::Adaptors::BunnyAdaptor.new
+    def adapter
+      @adapter ||= Kohawk::Adapters::Bunny.new
     end
 
-    def adaptor=(adaptor)
-      @adaptor = adaptor
+    def adapter=(adapter)
+      @adapter = adapter
     end
 
     def connect_options
