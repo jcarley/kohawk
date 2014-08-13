@@ -1,5 +1,6 @@
-require 'kohawk/core_ext'
 require "kohawk/version"
+require "kohawk/cli"
+require 'kohawk/core_ext'
 require "kohawk/event_dispatcher"
 require "kohawk/configuration"
 require "kohawk/connection_manager"
