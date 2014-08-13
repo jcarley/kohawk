@@ -38,9 +38,10 @@ describe Kohawk::ConnectionManager do
   end
 
   describe "#connect" do
-
     it "returns an instance of an adaptor" do
-      expect(subject.connect(options)).to be(adapter)
+      adaptor = subject.connect(options)
+      expect(adaptor).to respond_to(:connect)
+      expect(adaptor).to respond_to(:disconnect)
     end
 
     it "returns the same connection" do
@@ -52,12 +53,29 @@ describe Kohawk::ConnectionManager do
   end
 
   describe "#disconnect" do
-
     it "closes the session" do
       subject.connect(options)
       subject.disconnect
-      expect(subject.adapter).to be_nil
+      expect(subject.connections[:default]).to be_nil
     end
+  end
+
+  describe "#disconnect_all" do
+
+    it "calls close on each adapter" do
+      expect(adapter).to receive(:disconnect).twice
+      subject.connect(options)
+      subject.connect(options.merge(:name => "test1"))
+      subject.disconnect_all
+    end
+
+    it "closes all known connections" do
+      subject.connect(options)
+      subject.connect(options.merge(:name => "test1"))
+      subject.disconnect_all
+      expect(subject.connections).to be_empty
+    end
+
   end
 
 end
