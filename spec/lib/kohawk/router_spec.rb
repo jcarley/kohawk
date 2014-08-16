@@ -124,14 +124,14 @@ describe Kohawk::Router do
 
     it "adds the bindings to the queue definition" do
       subject.draw do
-        queue 'app:event:handler', :bindings => ['private.asset.create'], :as => :test_event
+        queue 'app:event:handler', :bindings => ['app.person.create'], :as => :test_event
       end
-      expect(subject.queues[:test_event]).to include(:bindings => ['private.asset.create'])
+      expect(subject.queues[:test_event]).to include(:bindings => ['app.person.create'])
     end
 
     it "adds options to the queue definition" do
       subject.draw do
-        queue 'app:event:handler', :bindings => ['private.asset.create'], :options => {:durable => true, :auto_delete => true}, :as => :test_event
+        queue 'app:event:handler', :bindings => ['app.person.create'], :options => {:durable => true, :auto_delete => true}, :as => :test_event
       end
       expect(subject.queues[:test_event]).to include(:options => {:durable => true, :auto_delete => true})
     end
