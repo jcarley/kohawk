@@ -202,13 +202,15 @@ describe Kohawk::Router do
 
 end
 
-# topic 'dsa' do
-  # queue 'istock:asset:create', :bindings => ['private.asset.create'], :as => :asset_create
-  # queue 'istock:content:update', :bindings => ['private.content.update'], :as => :asset_update
+# topic 'app_exchange' do
+  # queue 'app:person:create', :bindings => ['app.person.create'], :as => :person_create
+  # queue 'app:person:update', :bindings => ['app.person.update'], :as => :person_update
 # end
 
-# subscribe queue: 'asset:create', handler: 'asset_create#test_handle'
-# subscribe queue: 'asset:update', handler: 'content_update#test_handle'
+# subscribe queue: 'person:create', handler: 'person#create'
+# subscribe queue: 'person:update', handler: 'person#update'
+
+# publish queue: 'app:events'
 
 
 
