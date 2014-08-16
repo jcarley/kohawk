@@ -1,5 +1,7 @@
 # Kohawk
 
+[![Build Status](https://travis-ci.org/jcarley/kohawk.svg?branch=master)](https://travis-ci.org/jcarley/kohawk)
+
 TODO: Write a gem description
 
 ## Installation
