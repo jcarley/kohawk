@@ -40,9 +40,14 @@ Or install it yourself as:
     subscribe queue: :person_create, handler: 'person#create'
     subscribe queue: :person_update, handler: 'person#update'
 
-This routes file would create two queues ('app:person:create' & 'app:person:update').  The person
-handler class would receive messages from the 'app:person:create' queue to its create method, and
-from 'app:person:update' to its update method. 
+This routes file will create two queues ('app:person:create' &
+'app:person:update') on the app_exchange exchange.  The person handler class
+will receive messages from the 'app:person:create' queue to its create method,
+and from 'app:person:update' to its update method.
+
+The routes file is evaluated from top to bottom.  You must define a queue
+before you can subscribe a handler to that queue.  Doing this out of order will
+result in an error.
 
 ## Contributing
 
