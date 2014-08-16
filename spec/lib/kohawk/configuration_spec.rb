@@ -11,6 +11,7 @@ describe Kohawk::Configuration do
     it { should respond_to(:password) }
     it { should respond_to(:exchange_name) }
     it { should respond_to(:connect_options) }
+    it { should respond_to(:routes) }
 
   end
 
@@ -26,6 +27,12 @@ describe Kohawk::Configuration do
 
   it "yields the middleware chain when a block is given" do
     expect{ |b| Kohawk.configuration.middleware(&b) }.to yield_control
+  end
+
+  describe "#routes" do
+    it "returns an instance of a Kohawk::Router" do
+      expect(Kohawk.configuration.routes).to be_instance_of(Kohawk::Router)
+    end
   end
 
 end

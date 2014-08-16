@@ -17,6 +17,11 @@ module Kohawk
       @adapter = adapter
     end
 
+    def routes
+      @routes ||= Kohawk::Router.new
+      @routes
+    end
+
     def connect_options
       {
         :host  => host,
