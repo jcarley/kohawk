@@ -1,15 +1,14 @@
 module Kohawk
   class Binding
 
-    attr_reader :context, :exchange, :queue
+    attr_reader :context, :exchange
 
-    def initialize(context, exchange, queue)
+    def initialize(context, exchange)
       @context = context
       @exchange = exchange
-      @queue = queue
     end
 
-    def create
+    def bind(queue)
       # logger.info("Binding queue #{queue_name} to #{binding} ...")
       bindings.each do |binding|
         x = exchange.create
