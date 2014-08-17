@@ -1,24 +1,26 @@
 module Kohawk
   class Queue
 
-    attr_reader :event_name, :handler, :queue, :channel
+    attr_reader :context, :queue
 
-    def initialize(event_name, handler, channel)
-      @event_name = event_name
-      @handler = handler
-      @channel = channel
+    def initialize(context)
+      @context = context
     end
 
-    def declare_queue
-      @queue = channel.queue(queue_name, {:durable => true, :auto_delete => true})
+    def create
+      @queue ||= context.channel.queue(name, options)
     end
 
-    def queue_name
-      handler[1]
+    def name
+      context.queue_name
     end
 
-    def to_routing_key
-      event_name.to_s.gsub("_", ".")
+    def options
+      queue_definition[:options]
+    end
+
+    def queue_definition
+      context.queue_definition
     end
 
   end
