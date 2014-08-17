@@ -11,10 +11,31 @@ module Kohawk
 
       connect(:default) do |connection|
 
-        channel = connection.create_channel
+        Kohawk.configuration.routes.queues.each_pair do |queue_name, queue_definition|
 
-        logger.info("Connecting to exchange #{exchange_name} ...")
-        x = channel.topic(exchange_name, :durable => true)
+          channel = connection.create_channel
+
+          context = BindingContext.new(channel, queue_name, queue_definition)
+          exchange = Exchange.new(context)
+          queue = Queue.new(context)
+
+          # ----------- Binding
+          bindings = queue_definition[:bindings]
+          bindings.each do |binding|
+            # logger.info("Binding queue #{queue_name} to #{binding} ...")
+            q.bind(exchange, :routing_key => binding)
+          end
+
+          binding = Binding.new(context, exchange, queue)
+
+
+          subscribers = Kohawk.configuration.routes.subscribers[queue_name]
+          subscribers.each do |handler|
+            klass = handler[0]
+            method = handler[1]
+          end
+
+        end
 
         EventDispatcher.subscribers.each do |event_name, handlers|
 
