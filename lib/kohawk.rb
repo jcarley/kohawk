@@ -5,6 +5,7 @@ require 'kohawk/core_ext'
 require 'kohawk/queue'
 require 'kohawk/router'
 require 'kohawk/exchange'
+require 'kohawk/consumer'
 require "kohawk/event_dispatcher"
 require 'kohawk/configuration'
 require 'kohawk/connection_manager'
