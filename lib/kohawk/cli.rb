@@ -18,14 +18,6 @@ module Kohawk
           context = BindingContext.new(channel, queue_name, queue_definition)
           exchange = Exchange.new(context)
           queue = Queue.new(context)
-
-          # ----------- Binding
-          bindings = queue_definition[:bindings]
-          bindings.each do |binding|
-            # logger.info("Binding queue #{queue_name} to #{binding} ...")
-            q.bind(exchange, :routing_key => binding)
-          end
-
           binding = Binding.new(context, exchange, queue)
 
 
