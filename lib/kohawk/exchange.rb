@@ -8,7 +8,7 @@ module Kohawk
     end
 
     def create
-      @exchange ||= Bunny::Exchange.new(context.channel, type, name, options)
+      @exchange ||= ::Bunny::Exchange.new(context.channel, type, name, options)
     end
 
     def name
@@ -20,7 +20,7 @@ module Kohawk
     end
 
     def options
-      queue_definition[:exchange][:options]
+      queue_definition[:exchange][:options] || {}
     end
 
     def queue_definition

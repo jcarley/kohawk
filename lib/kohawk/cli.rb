@@ -24,11 +24,11 @@ module Kohawk
           consumer = Consumer.new(context, queue)
           consumer.listen
 
-          subscribers = Kohawk.configuration.routes.subscribers[queue_name]
-          subscribers.each do |handler|
-            klass = handler[0]
-            method = handler[1]
-          end
+          # subscribers = Kohawk.configuration.routes.subscribers[queue_name]
+          # subscribers.each do |handler|
+            # klass = handler[0]
+            # method = handler[1]
+          # end
 
         end
 
@@ -46,7 +46,8 @@ module Kohawk
       options = Kohawk.configuration.connect_options
       options = options.merge(:name => name)
       connection = ConnectionManager.instance.connect(options)
-      block.call(connection) if block_given?
+      yield connection if block_given?
+      connection
     end
 
   end

@@ -1,6 +1,7 @@
 require 'kohawk/version'
 require 'kohawk/cli'
 require 'kohawk/binding'
+require 'kohawk/binding_context'
 require 'kohawk/core_ext'
 require 'kohawk/queue'
 require 'kohawk/router'

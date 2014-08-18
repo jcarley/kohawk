@@ -48,154 +48,166 @@ describe Kohawk::Router do
       expect { |b| subject.draw(&b) }.to yield_control
     end
 
-    it "adds a new exchange" do
-      subject.draw do
-        exchange "test_exchange"
-      end
-      expect(subject.exchanges).to include("test_exchange")
-    end
+    context "exchange" do
 
-    it "adds an exchange with the give options" do
-      subject.draw do
-        exchange "test_exchange", :type => :topic, :durable => true
-      end
-      expect(subject.exchanges["test_exchange"]).to eql({:type => :topic, :durable => true})
-    end
-
-    it "adds a topic exchange" do
-      subject.draw do
-        topic "test_exchange", :durable => true
-      end
-      expect(subject.exchanges["test_exchange"]).to eql({:type => :topic, :durable => true})
-    end
-
-    it "adds a new queue" do
-      subject.draw do
-        topic("test_exchange", :durable => true) do
-          queue 'app:event:handler'
-        end
-      end
-      expect(subject.queues).to include('app:event:handler')
-    end
-
-    it "adds a new queue to an exchange" do
-      subject.draw do
-        topic("test_exchange", :durable => true) do
-          queue 'app:event:handler'
-        end
-      end
-      expect(subject.queues['app:event:handler']).to include(:exchange => {:name => 'test_exchange', :type => :topic, :durable => true})
-    end
-
-    it "uses the name param when no :as key is given" do
-      subject.draw do
-        queue 'app:event:handler'
-      end
-      expect(subject.queues).to include('app:event:handler')
-    end
-
-    it "adds a queue to the default exchange definition" do
-      subject.draw do
-        queue 'app:event:handler', :as => :test_event
-      end
-      expect(subject.queues[:test_event]).to include(:exchange => {:name => 'default', :type => :topic})
-    end
-
-    it "names the queue specified by the :as key" do
-      subject.draw do
-        queue 'app:event:handler', :as => :test_event
-      end
-      expect(subject.queues).to include(:test_event)
-    end
-
-    it "includes the name in the queue definition" do
-      subject.draw do
-        queue 'app:event:handler', :as => :test_event
-      end
-      expect(subject.queues[:test_event]).to include(:name => 'app:event:handler')
-    end
-
-    it "does not include the :as key in the queue definition" do
-      subject.draw do
-        queue 'app:event:handler', :as => :test_event
-      end
-      expect(subject.queues[:test_event]).to_not include(:as => :test_event)
-    end
-
-    it "adds the bindings to the queue definition" do
-      subject.draw do
-        queue 'app:event:handler', :bindings => ['app.person.create'], :as => :test_event
-      end
-      expect(subject.queues[:test_event]).to include(:bindings => ['app.person.create'])
-    end
-
-    it "adds options to the queue definition" do
-      subject.draw do
-        queue 'app:event:handler', :bindings => ['app.person.create'], :options => {:durable => true, :auto_delete => true}, :as => :test_event
-      end
-      expect(subject.queues[:test_event]).to include(:options => {:durable => true, :auto_delete => true})
-    end
-
-    it "adds a subscriber" do
-      subject.draw do
-        queue 'app:person:added', :as => :person_added
-        subscribe queue: :person_added, handler: 'person#added'
-      end
-      expect(subject.subscribers).to include(:person_added)
-    end
-
-    it "throws an error when adding a subscriber to a non-existant queue" do
-      expect {
+      it "adds a new exchange" do
         subject.draw do
-          queue 'app:person:added', :as => :person_added
-          subscribe queue: :person, handler: 'person#added'
+          exchange "test_exchange"
         end
-      }.to raise_error(Kohawk::Router::NonExistentQueueError)
-    end
-
-    it "parses the handler mapping into class and method" do
-      subject.draw do
-        queue 'app:person:added', :as => :person_added
-        subscribe queue: :person_added, handler: 'person#added'
+        expect(subject.exchanges).to include("test_exchange")
       end
-      expect(subject.subscribers[:person_added]).to include([PersonHandler, :added])
-    end
 
-    it "allows multiple subscribers on the same queue" do
-      subject.draw do
-        queue 'app:person:added', :as => :person_added
-        subscribe queue: :person_added, handler: 'person#added'
-        subscribe queue: :person_added, handler: 'person#log'
+      it "adds an exchange with the give options" do
+        subject.draw do
+          exchange "test_exchange", :type => :topic, :options => {:durable => true}
+        end
+        expect(subject.exchanges["test_exchange"]).to eql({:type => :topic, :options => {:durable => true}})
       end
-      expect(subject.subscribers[:person_added]).to include([PersonHandler, :added], [PersonHandler, :added])
+
+      it "adds a topic exchange" do
+        subject.draw do
+          topic "test_exchange", :options => {:durable => true}
+        end
+        expect(subject.exchanges["test_exchange"]).to eql({:type => :topic, :options => {:durable => true}})
+      end
+
     end
 
-    it "raises an error when a handler subscribes to a queue more than once" do
-      expect {
+    context "queues" do
+
+      it "adds a new queue" do
+        subject.draw do
+          topic("test_exchange", :durable => true) do
+            queue 'app:event:handler'
+          end
+        end
+        expect(subject.queues).to include('app:event:handler')
+      end
+
+      it "adds a new queue to an exchange" do
+        subject.draw do
+          topic("test_exchange", :durable => true) do
+            queue 'app:event:handler'
+          end
+        end
+        expect(subject.queues['app:event:handler']).to include(:exchange => {:name => 'test_exchange', :type => :topic, :durable => true})
+      end
+
+      it "uses the name param when no :as key is given" do
+        subject.draw do
+          queue 'app:event:handler'
+        end
+        expect(subject.queues).to include('app:event:handler')
+      end
+
+      it "adds a queue to the default exchange definition" do
+        subject.draw do
+          queue 'app:event:handler', :as => :test_event
+        end
+        expect(subject.queues[:test_event]).to include(:exchange => {:name => 'default', :type => :topic})
+      end
+
+      it "names the queue specified by the :as key" do
+        subject.draw do
+          queue 'app:event:handler', :as => :test_event
+        end
+        expect(subject.queues).to include(:test_event)
+      end
+
+      it "includes the name in the queue definition" do
+        subject.draw do
+          queue 'app:event:handler', :as => :test_event
+        end
+        expect(subject.queues[:test_event]).to include(:name => 'app:event:handler')
+      end
+
+      it "does not include the :as key in the queue definition" do
+        subject.draw do
+          queue 'app:event:handler', :as => :test_event
+        end
+        expect(subject.queues[:test_event]).to_not include(:as => :test_event)
+      end
+
+      it "adds the bindings to the queue definition" do
+        subject.draw do
+          queue 'app:event:handler', :bindings => ['app.person.create'], :as => :test_event
+        end
+        expect(subject.queues[:test_event]).to include(:bindings => ['app.person.create'])
+      end
+
+      it "adds options to the queue definition" do
+        subject.draw do
+          queue 'app:event:handler', :bindings => ['app.person.create'], :options => {:durable => true, :auto_delete => true}, :as => :test_event
+        end
+        expect(subject.queues[:test_event]).to include(:options => {:durable => true, :auto_delete => true})
+      end
+
+    end
+
+    context "subscriber" do
+
+      it "adds a subscriber" do
         subject.draw do
           queue 'app:person:added', :as => :person_added
           subscribe queue: :person_added, handler: 'person#added'
+        end
+        expect(subject.subscribers).to include(:person_added)
+      end
+
+      it "throws an error when adding a subscriber to a non-existant queue" do
+        expect {
+          subject.draw do
+            queue 'app:person:added', :as => :person_added
+            subscribe queue: :person, handler: 'person#added'
+          end
+        }.to raise_error(Kohawk::Router::NonExistentQueueError)
+      end
+
+      it "parses the handler mapping into class and method" do
+        subject.draw do
+          queue 'app:person:added', :as => :person_added
           subscribe queue: :person_added, handler: 'person#added'
         end
-      }.to raise_error(Kohawk::Router::DuplicateHandlerSubscriptionError)
-    end
+        expect(subject.subscribers[:person_added]).to include([PersonHandler, :added])
+      end
 
-    it "requires a queue" do
-      expect {
+      it "allows multiple subscribers on the same queue" do
         subject.draw do
           queue 'app:person:added', :as => :person_added
-          subscribe handler: 'person#added'
+          subscribe queue: :person_added, handler: 'person#added'
+          subscribe queue: :person_added, handler: 'person#log'
         end
-      }.to raise_error(Kohawk::Router::QueueRequiredForSubscriptionError)
-    end
+        expect(subject.subscribers[:person_added]).to include([PersonHandler, :added], [PersonHandler, :added])
+      end
 
-    it "requires a handler" do
-      expect {
-        subject.draw do
-          queue 'app:person:added', :as => :person_added
-          subscribe queue: :person_added
-        end
-      }.to raise_error(Kohawk::Router::HandlerRequiredForSubscriptionError)
+      it "raises an error when a handler subscribes to a queue more than once" do
+        expect {
+          subject.draw do
+            queue 'app:person:added', :as => :person_added
+            subscribe queue: :person_added, handler: 'person#added'
+            subscribe queue: :person_added, handler: 'person#added'
+          end
+        }.to raise_error(Kohawk::Router::DuplicateHandlerSubscriptionError)
+      end
+
+      it "requires a queue" do
+        expect {
+          subject.draw do
+            queue 'app:person:added', :as => :person_added
+            subscribe handler: 'person#added'
+          end
+        }.to raise_error(Kohawk::Router::QueueRequiredForSubscriptionError)
+      end
+
+      it "requires a handler" do
+        expect {
+          subject.draw do
+            queue 'app:person:added', :as => :person_added
+            subscribe queue: :person_added
+          end
+        }.to raise_error(Kohawk::Router::HandlerRequiredForSubscriptionError)
+      end
+
     end
 
   end

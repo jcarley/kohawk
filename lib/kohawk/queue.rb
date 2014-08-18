@@ -16,7 +16,7 @@ module Kohawk
     end
 
     def options
-      queue_definition[:options]
+      queue_definition[:options] || {}
     end
 
     def queue_definition
