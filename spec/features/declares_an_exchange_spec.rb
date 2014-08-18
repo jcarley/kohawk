@@ -27,7 +27,6 @@ describe 'An exchange defined in the routes file' do
 
     url = 'http://dev:dev@127.0.0.1:15672/api/exchanges/local/exampleapp'
     RestClient.get url, {:accept => :json} do |response, request, result, &block|
-      puts response.code
       case response.code
       when 200
         body = JSON.load(response.body)
@@ -35,6 +34,8 @@ describe 'An exchange defined in the routes file' do
         expect(body["vhost"]).to eql("local")
         expect(body["durable"]).to be(true)
         expect(body["auto_delete"]).to be(true)
+      else
+        fail
       end
     end
 
