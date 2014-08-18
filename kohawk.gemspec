@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec-nc"
   spec.add_development_dependency "pry"
+  spec.add_development_dependency "rest-client"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
