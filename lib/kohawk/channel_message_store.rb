@@ -1,0 +1,28 @@
+module Kohawk
+  class ChannelMessageStore
+
+    attr_reader :event_name, :channel, :delivery_info, :metadata, :payload
+
+    def initialize(event_name, ch, delivery_info, metadata, payload)
+      @event_name = event_name
+      @channel = ch
+      @delivery_info = delivery_info
+      @metadata = metadata
+      @payload = payload
+    end
+
+    def accept
+      channel.acknowledge(delivery_info.delivery_tag)
+    end
+    alias_method :acknowledge, :accept
+
+    def reject
+      channel.reject(delivery_info.delivery_tag, false)
+    end
+
+    def requeue
+      channel.reject(delivery_info.delivery_tag, true)
+    end
+
+  end
+end
