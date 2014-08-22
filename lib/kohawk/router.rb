@@ -43,6 +43,12 @@ module Kohawk
       (@subscribers[queue_name] ||= []) << handler_entry
     end
 
+    def subscribers_for(queue_name)
+      handlers = subscribers[queue_name]
+      yield handlers if block_given?
+      handlers
+    end
+
   end
 
   class Mapper

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Kohawk::ChannelMessageStore do
 
-  subject { Kohawk::ChannelMessageStore.new(event_name, channel, delivery_info, metadata, payload) }
+  subject { Kohawk::ChannelMessageStore.new(queue_name, channel, delivery_info, metadata, payload) }
 
-  let(:event_name) { "" }
+  let(:queue_name) { "app:test:queue" }
   let(:channel) { double('channel', :acknowledge => nil, :reject => nil) }
   let(:delivery_info) { double('delivery_info', :delivery_tag => "1234567890") }
   let(:metadata) { double('metadata') }
@@ -15,7 +15,7 @@ describe Kohawk::ChannelMessageStore do
     it { should respond_to(:acknowledge) }
     it { should respond_to(:reject) }
     it { should respond_to(:requeue) }
-    it { should respond_to(:event_name) }
+    it { should respond_to(:queue_name) }
     it { should respond_to(:channel) }
     it { should respond_to(:delivery_info) }
     it { should respond_to(:metadata) }

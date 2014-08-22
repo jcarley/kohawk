@@ -15,8 +15,8 @@ module Kohawk
 
       consumer.on_delivery() do |delivery_info, metadata, payload|
         channel_message_store = ChannelMessageStore.new(queue.name, context.channel, delivery_info, metadata, payload)
-        event_dispatcher = EventDispatcher.new(channel_message_store)
-        event_dispatcher.process
+        event_dispatcher = EventDispatcher.new
+        event_dispatcher.process(channel_message_store)
       end
 
       q.subscribe_with(consumer, :block => false)

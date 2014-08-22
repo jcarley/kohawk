@@ -20,7 +20,7 @@ describe "Execute message handler" do
         queue 'app:person:update', :bindings => ['app.person.update'], :options => {durable: true, auto_delete: true}, :as => :person_update
       end
 
-      # subscribe queue: :person_create, handler: 'person#create'
+      subscribe queue: :person_create, handler: 'person#create'
       # subscribe queue: :person_update, handler: 'person#update'
 
     end
@@ -37,17 +37,11 @@ describe "Execute message handler" do
 
     specify "it will be routed to all message handlers that have subscribed to it" do
 
-      sleep 1
-
       headers = {version: 1}
       routing_key = "app.person.create"
-      payload_string = {
-        properties: {timestamp: Time.now.to_i, correlation_id: SecureRandom.uuid, message_id: SecureRandom.uuid, headers: {version: 1}},
-        payload: {message: "hello"},
-        payload_encoding: "string"
-      }
+      payload_hash = {message: "hello"}
 
-      payload = JSON.generate(payload_string)
+      payload = JSON.generate(payload_hash)
       puts payload
 
       Helpers.publish_message(payload, routing_key, headers)

@@ -1,10 +1,10 @@
 module Kohawk
   class ChannelMessageStore
 
-    attr_reader :event_name, :channel, :delivery_info, :metadata, :payload
+    attr_reader :queue_name, :channel, :delivery_info, :metadata, :payload
 
-    def initialize(event_name, ch, delivery_info, metadata, payload)
-      @event_name = event_name
+    def initialize(queue_name, ch, delivery_info, metadata, payload)
+      @queue_name = queue_name
       @channel = ch
       @delivery_info = delivery_info
       @metadata = metadata
