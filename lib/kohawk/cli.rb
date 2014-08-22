@@ -37,7 +37,7 @@ module Kohawk
     end
 
     def stop
-      ConnectionManager.disconnect_all
+      ConnectionManager.instance.disconnect_all
     end
 
     private
