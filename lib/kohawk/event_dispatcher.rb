@@ -14,7 +14,6 @@ module Kohawk
       Kohawk.configuration.routes.subscribers_for(queue_name) do |handlers|
 
         handlers.each do |handler|
-          puts handler.inspect
           klass = handler[0].new
           klass.send(handler[1], channel_proxy)
         end

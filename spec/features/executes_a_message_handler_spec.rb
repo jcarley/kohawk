@@ -21,6 +21,7 @@ describe "Execute message handler" do
       end
 
       subscribe queue: :person_create, handler: 'person#create'
+      subscribe queue: :person_create, handler: 'asset#create'
       # subscribe queue: :person_update, handler: 'person#update'
 
     end
@@ -39,10 +40,7 @@ describe "Execute message handler" do
 
       headers = {version: 1}
       routing_key = "app.person.create"
-      payload_hash = {message: "hello"}
-
-      payload = JSON.generate(payload_hash)
-      puts payload
+      payload = JSON.generate({message: "hello"})
 
       Helpers.publish_message(payload, routing_key, headers)
 
