@@ -21,7 +21,6 @@ describe "Execute message handler" do
       end
 
       subscribe queue: :person_create, handler: 'person#create'
-      subscribe queue: :person_create, handler: 'asset#create'
       # subscribe queue: :person_update, handler: 'person#update'
 
     end

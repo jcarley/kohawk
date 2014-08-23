@@ -171,15 +171,6 @@ describe Kohawk::Router do
         expect(subject.subscribers[:person_added]).to include([PersonHandler, :added])
       end
 
-      it "allows multiple subscribers on the same queue" do
-        subject.draw do
-          queue 'app:person:added', :as => :person_added
-          subscribe queue: :person_added, handler: 'person#added'
-          subscribe queue: :person_added, handler: 'person#log'
-        end
-        expect(subject.subscribers[:person_added]).to include([PersonHandler, :added], [PersonHandler, :added])
-      end
-
       it "raises an error when a handler subscribes to a queue more than once" do
         expect {
           subject.draw do
@@ -206,6 +197,16 @@ describe Kohawk::Router do
             subscribe queue: :person_added
           end
         }.to raise_error(Kohawk::Router::HandlerRequiredForSubscriptionError)
+      end
+
+      it "allows one subscription per queue" do
+        expect {
+          subject.draw do
+            queue 'app:person:added', :as => :person_added
+            subscribe queue: :person_added, handler: 'person#added'
+            subscribe queue: :person_added, handler: 'asset#added'
+          end
+        }.to raise_error(Kohawk::Router::DuplicateSubscriptionError)
       end
 
     end

@@ -7,6 +7,7 @@ module Kohawk
     class DuplicateHandlerSubscriptionError < StandardError; end;
     class QueueRequiredForSubscriptionError < StandardError; end;
     class HandlerRequiredForSubscriptionError < StandardError; end;
+    class DuplicateSubscriptionError < StandardError; end;
 
     def initialize
       @exchanges = {}
@@ -17,6 +18,7 @@ module Kohawk
     def clear!
       @exchanges = @exchanges.clear
       @queues = @queues.clear
+      @subscribers = @subscribers.clear
     end
 
     def draw(&block)
@@ -40,6 +42,7 @@ module Kohawk
     def add_subscriber(queue_name, handler_entry)
       raise NonExistentQueueError unless queues.has_key?(queue_name)
       raise DuplicateHandlerSubscriptionError if (subscribers[queue_name] || []).include?(handler_entry)
+      raise DuplicateSubscriptionError if @subscribers.has_key?(queue_name)
       (@subscribers[queue_name] ||= []) << handler_entry
     end
 
