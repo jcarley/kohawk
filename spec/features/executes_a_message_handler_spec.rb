@@ -14,15 +14,12 @@ describe "Execute message handler" do
     end
 
     Kohawk.configuration.routes.draw do
-
       topic :exampleapp, :options => {:durable => true, :auto_delete => true} do
         queue 'app:person:create', :bindings => ['app.person.create'], :options => {durable: true, auto_delete: true}, :as => :person_create
         queue 'app:person:update', :bindings => ['app.person.update'], :options => {durable: true, auto_delete: true}, :as => :person_update
       end
 
       subscribe queue: :person_create, handler: 'person#create'
-      # subscribe queue: :person_update, handler: 'person#update'
-
     end
 
     @cli = Kohawk::CLI.new
